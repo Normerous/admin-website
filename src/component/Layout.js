@@ -8,11 +8,12 @@ import {
   useLocation,
   useNavigate
 } from "react-router-dom";
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 const items = [
   { key: '1', label: 'Dashboard', path: '/app/dashboard', icon: <PieChartOutlined /> },
-  { key: '2', label: 'Product', path: '/app/product', icon: <DesktopOutlined /> }
+  { key: '2', label: 'Product', path: '/app/product', icon: <DesktopOutlined /> },
+  { key: '3', label: 'AddProduct', path: '/app/addproduct', icon: <DesktopOutlined /> }
 ]
 
 const MyLayout = props => {
@@ -26,9 +27,11 @@ const MyLayout = props => {
 
   React.useEffect(() => {
     let item = items.find(_item => pathname.startsWith(_item.path));
-    setCurrent(item.key);
-    let pathSplit = pathname.split("/").slice(1);
-    setBreadcrumb(pathSplit);
+    if(item) {
+      setCurrent(item.key);
+      let pathSplit = pathname.split("/").slice(1);
+      setBreadcrumb(pathSplit);
+    } else navigate("/error");
   }, [pathname]);
   const onCollapse = input => setCollapsed(input);
 
@@ -66,7 +69,6 @@ const MyLayout = props => {
             {props.children}
           </div>
         </Content>
-        {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
       </Layout>
     </Layout>
   );

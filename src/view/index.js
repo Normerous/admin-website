@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
     Routes,
     Route,
@@ -10,12 +10,12 @@ import Layout from "../component/Layout";
 import { useSelector, useDispatch } from 'react-redux';
 import { myAPI } from "../functions";
 import { setDetailFromLogin } from "../redux/actions";
-import { Loading } from "../component/styles";
 import ErrorPage from "./ErrorPage";
 import DashboardPage from "./DashboardPage";
+import AddProductPage from "./AddProductPage";
+import WithLoading from "../component/WithLoading";
 
-const Main = () => {
-    const [loading, setLoading] = useState(false);
+const Main = props => {
     const { email } = useSelector(state => state);
     const dispatch = useDispatch();
     let navigate = useNavigate();
@@ -24,8 +24,7 @@ const Main = () => {
         if (!email) {
             const fetch = async () => {
                 const response = await myAPI("/auth/checkToken", {}, "POST");
-                console.log("response", response);
-                setLoading(false);
+                props.closeLoading();
                 if (response.status === 200) {
                     dispatch(setDetailFromLogin({ email: response.data.user.email, token: localStorage.getItem("token") }));
                 } else {
@@ -34,23 +33,23 @@ const Main = () => {
                     navigate("/");
                 }
             }
-            setLoading(true);
+            props.openLoading();
             fetch();
         }
 
     }, [email, dispatch, navigate]);
-    return loading ? <Loading /> :
-        <Layout>
-            <Routes>
-                {email ? <>
-                    <Route path="/" element={<Navigate replace to="/app/product" />} />
-                    <Route path="dashboard" element={<DashboardPage />} />
-                    <Route path="product" element={<Product />} />
-                    <Route path="error" element={<ErrorPage />} />
-                    <Route path="/*" element={<Navigate replace to="/app/error" />} />
-                </> : null}
-            </Routes>
-        </Layout>
+    return props.loading ? null : <Layout>
+        <Routes>
+            {email ? <>
+                <Route path="/" element={<Navigate replace to="/app/product" />} />
+                <Route path="dashboard" element={<DashboardPage />} />
+                <Route path="product" element={<Product />} />
+                <Route path="addproduct" element={<AddProductPage />} />
+                <Route path="error" element={<ErrorPage />} />
+                <Route path="/*" element={<Navigate replace to="/app/error" />} />
+            </> : null}
+        </Routes>
+    </Layout>
 }
 
-export default Main;
+export default WithLoading(Main);

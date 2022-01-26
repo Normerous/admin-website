@@ -1,30 +1,5 @@
-import styled, { keyframes } from "styled-components";
-
-const rotate360 = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const Spinner = styled.div`
-  position: absolute;
-  left: calc(50% - 25px);
-  top: calc(50% - 25px);
-  animation: ${rotate360} 1s linear infinite;
-  transform: translateZ(0);
-  
-  border-top: 2px solid #557571;
-  border-right: 2px solid #557571;
-  border-bottom: 2px solid #557571;
-  border-left: 4px solid #D49A89;
-  background: transparent;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
+import styled from "styled-components";
+import { Spin } from "antd";
 
 const Container = styled.div`
 position: absolute;
@@ -33,10 +8,14 @@ width: 100vw;
 background: transparent;
 top: 0;
 left: 0;
+z-index: 100;
+display: flex;
+justify-content: center;
+align-items: center;
 `;
 
 export const Loading = () => <Container>
-    <Spinner />
+  <Spin size="large" />
 </Container>;
 
 export const Button = styled.button`

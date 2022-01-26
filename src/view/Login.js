@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Form, Input, Space, Button } from 'antd';
+import { Form, Input, Space, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
     useNavigate
@@ -9,7 +9,7 @@ import {
     setDetailFromLogin
 } from "../redux/actions";
 import { useDispatch } from 'react-redux';
-import WithAlert from "../component/WithAlert";
+import WithLoading from "../component/WithLoading";
 import { myAPI } from "../functions";
 const Card = styled.div`
 display: flex;
@@ -47,10 +47,10 @@ const Login = props => {
         console.log("response", response);
         if (response.status === 200) {
             localStorage.setItem("token", response.data.token);
-            dispatch(setDetailFromLogin({ email: response.data.user.email, token: response.data.token }))
-            props.alertSuccess(response.data.msg);
+            dispatch(setDetailFromLogin({ email: response.data.user.email, token: response.data.token }));
+            message.success(response.data.msg);
             navigate("/app/product");
-        } else props.alertError(response.data.msg);
+        } else  message.error(response.data.msg);
     }
     return <div style={{ height: "100vh", display: "flex", alignItems: "center" }}>
         <Card>
@@ -105,4 +105,4 @@ const Login = props => {
         </Card>
     </div>
 }
-export default WithAlert(Login);
+export default WithLoading(Login);

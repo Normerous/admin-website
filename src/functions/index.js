@@ -11,3 +11,12 @@ export const myAPI = async (path = "", data = {}, method = "GET") => {
     }).then(res => res);
     return response;
 };
+
+export const formatNumberToComma = (number) => {
+    let n = parseFloat(number).toFixed(2);
+    let withCommas = Number(n).toLocaleString('en', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    return withCommas;
+}
